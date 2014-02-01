@@ -11,6 +11,7 @@ namespace Glimpse.EventStore.Messages
         public string ConnectionName { get; set; }
         public string Name { get; set; }
         public long ElapsedMilliseconds { get; set; }
+        public object Arguments { get; set; }
         public object Results { get; set; }
     }
 }
