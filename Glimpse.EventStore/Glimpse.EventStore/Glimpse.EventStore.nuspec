@@ -2,17 +2,17 @@
 <package >
   <metadata>
     <id>Glimpse.EventStore</id>
-    <version>1.0.0-alpha1</version>
+    <version>1.0.0-alpha2</version>
     <title>Glimpse EventStore</title>
     <authors>Jakub Konecki</authors>
     <owners>Jakub Konecki</owners>
     <description>
-      Glimpse plugin for Event Store.
+      Glimpse plugin for Event Store. To enable just replace calls to EventStore.ClientAPI.EventStoreConnection with Glimpse.EventStore.ProfiledEventStoreConnection.
     </description>
     <releaseNotes>
     </releaseNotes>
     <summary>
-      Glimpse plugin for Event Store.
+      Glimpse plugin for Event Store.      
     </summary>
     <language>en-US</language>
     <projectUrl>https://nuget.org/packages/Glimpse.EventStore</projectUrl>
