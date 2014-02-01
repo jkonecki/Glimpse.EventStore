@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Glimpse.EventStore</id>
-    <version>1.0.0-alpha2</version>
+    <version>1.0.0-alpha3</version>
     <title>Glimpse EventStore</title>
     <authors>Jakub Konecki</authors>
     <owners>Jakub Konecki</owners>
@@ -15,7 +15,7 @@
       Glimpse plugin for Event Store.      
     </summary>
     <language>en-US</language>
-    <projectUrl>https://nuget.org/packages/Glimpse.EventStore</projectUrl>
+    <projectUrl>https://github.com/jkonecki/Glimpse.EventStore</projectUrl>
     <iconUrl>https://nuget.org/Content/Images/packageDefaultIcon-50x50.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
