@@ -29,4 +29,4 @@ Disclaimer
 This is an alpha version of the plugin. May contain bugs.
 If you're lucky to find one, please report it on GitHub.
 
-Also, do not withhold any suggestions or feedback.
+Also, do not withhold any suggestions or feedback - @jakubkonecki.
