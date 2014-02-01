@@ -26,17 +26,20 @@ namespace Glimpse.EventStore
 
         public void AppendToStream(string stream, int expectedVersion, IEnumerable<EventData> events, UserCredentials userCredentials = null)
         {
-            this.Connection.AppendToStream(stream, expectedVersion, events, userCredentials);
+            this.ProfileActivity("AppendToStream", 
+                () => this.Connection.AppendToStream(stream, expectedVersion, events, userCredentials));
         }
 
         public void AppendToStream(string stream, int expectedVersion, UserCredentials userCredentials, params EventData[] events)
         {
-            this.Connection.AppendToStream(stream, expectedVersion, userCredentials, events);
+            this.ProfileActivity("AppendToStream", 
+                () => this.Connection.AppendToStream(stream, expectedVersion, userCredentials, events));
         }
         
         public void AppendToStream(string stream, int expectedVersion, params EventData[] events)
         {
-            this.Connection.AppendToStream(stream, expectedVersion, events);
+            this.ProfileActivity("AppendToStream", 
+                () => this.Connection.AppendToStream(stream, expectedVersion, events));
         }
 
         public Task AppendToStreamAsync(string stream, int expectedVersion, IEnumerable<EventData> events, UserCredentials userCredentials = null)
@@ -56,12 +59,14 @@ namespace Glimpse.EventStore
 
         public void Close()
         {
-            this.Connection.Close();
+            this.ProfileActivity("Close", 
+                () => this.Connection.Close());
         }
 
         public void Connect()
         {
-            this.Connection.Connect();
+            this.ProfileActivity("Connect", 
+                () => this.Connection.Connect());
         }
 
         public Task ConnectAsync()
@@ -76,12 +81,13 @@ namespace Glimpse.EventStore
 
         public EventStoreTransaction ContinueTransaction(long transactionId, UserCredentials userCredentials = null)
         {
-            return this.Connection.ContinueTransaction(transactionId, userCredentials);
+            return this.ProfileActivity("ContinueTransaction", () => this.Connection.ContinueTransaction(transactionId, userCredentials));
         }
 
         public void DeleteStream(string stream, int expectedVersion, UserCredentials userCredentials = null)
         {
-            this.Connection.DeleteStream(stream, expectedVersion, userCredentials);
+            this.ProfileActivity("DeleteStream", 
+                () => this.Connection.DeleteStream(stream, expectedVersion, userCredentials));
         }
 
         public Task DeleteStreamAsync(string stream, int expectedVersion, UserCredentials userCredentials = null)
@@ -91,12 +97,12 @@ namespace Glimpse.EventStore
 
         public StreamMetadataResult GetStreamMetadata(string stream, UserCredentials userCredentials = null)
         {
-            return this.Connection.GetStreamMetadata(stream, userCredentials);
+            return this.ProfileActivity("GetStreamMetadata", () => this.Connection.GetStreamMetadata(stream, userCredentials));
         }
 
         public RawStreamMetadataResult GetStreamMetadataAsRawBytes(string stream, UserCredentials userCredentials = null)
         {
-            return this.Connection.GetStreamMetadataAsRawBytes(stream, userCredentials);
+            return this.ProfileActivity("GetStreamMetadataAsRawBytes", () => this.Connection.GetStreamMetadataAsRawBytes(stream, userCredentials));
         }
 
         public Task<RawStreamMetadataResult> GetStreamMetadataAsRawBytesAsync(string stream, UserCredentials userCredentials = null)
@@ -111,7 +117,7 @@ namespace Glimpse.EventStore
 
         public AllEventsSlice ReadAllEventsBackward(Position position, int maxCount, bool resolveLinkTos, UserCredentials userCredentials = null)
         {
-            return this.Connection.ReadAllEventsBackward(position, maxCount, resolveLinkTos, userCredentials);
+            return this.ProfileActivity("ReadAllEventsBackward", () => this.Connection.ReadAllEventsBackward(position, maxCount, resolveLinkTos, userCredentials));
         }
 
         public Task<AllEventsSlice> ReadAllEventsBackwardAsync(Position position, int maxCount, bool resolveLinkTos, UserCredentials userCredentials = null)
@@ -121,7 +127,7 @@ namespace Glimpse.EventStore
 
         public AllEventsSlice ReadAllEventsForward(Position position, int maxCount, bool resolveLinkTos, UserCredentials userCredentials = null)
         {
-            return this.Connection.ReadAllEventsForward(position, maxCount, resolveLinkTos, userCredentials);
+            return this.ProfileActivity("ReadAllEventsForward", () => this.Connection.ReadAllEventsForward(position, maxCount, resolveLinkTos, userCredentials));
         }
 
         public Task<AllEventsSlice> ReadAllEventsForwardAsync(Position position, int maxCount, bool resolveLinkTos, UserCredentials userCredentials = null)
@@ -131,7 +137,7 @@ namespace Glimpse.EventStore
 
         public EventReadResult ReadEvent(string stream, int eventNumber, bool resolveLinkTos, UserCredentials userCredentials = null)
         {
-            return this.Connection.ReadEvent(stream, eventNumber, resolveLinkTos, userCredentials);
+            return this.ProfileActivity("ReadEvent", () => this.Connection.ReadEvent(stream, eventNumber, resolveLinkTos, userCredentials));
         }
 
         public Task<EventReadResult> ReadEventAsync(string stream, int eventNumber, bool resolveLinkTos, UserCredentials userCredentials = null)
@@ -141,7 +147,7 @@ namespace Glimpse.EventStore
 
         public StreamEventsSlice ReadStreamEventsBackward(string stream, int start, int count, bool resolveLinkTos, UserCredentials userCredentials = null)
         {
-            return this.Connection.ReadStreamEventsBackward(stream, start, count, resolveLinkTos, userCredentials);
+            return this.ProfileActivity("ReadStreamEventsBackward", () => this.Connection.ReadStreamEventsBackward(stream, start, count, resolveLinkTos, userCredentials));
         }
 
         public Task<StreamEventsSlice> ReadStreamEventsBackwardAsync(string stream, int start, int count, bool resolveLinkTos, UserCredentials userCredentials = null)
@@ -151,7 +157,7 @@ namespace Glimpse.EventStore
 
         public StreamEventsSlice ReadStreamEventsForward(string stream, int start, int count, bool resolveLinkTos, UserCredentials userCredentials = null)
         {
-            return ProfileActivity("ReadStreamEventsForward", () => this.Connection.ReadStreamEventsForward(stream, start, count, resolveLinkTos, userCredentials));
+            return this.ProfileActivity("ReadStreamEventsForward", () => this.Connection.ReadStreamEventsForward(stream, start, count, resolveLinkTos, userCredentials));
         }
 
         public Task<StreamEventsSlice> ReadStreamEventsForwardAsync(string stream, int start, int count, bool resolveLinkTos, UserCredentials userCredentials = null)
@@ -161,12 +167,14 @@ namespace Glimpse.EventStore
 
         public void SetStreamMetadata(string stream, int expectedMetastreamVersion, byte[] metadata, UserCredentials userCredentials = null)
         {
-            this.Connection.SetStreamMetadata(stream, expectedMetastreamVersion, metadata, userCredentials);
+            this.ProfileActivity("SetStreamMetadata", 
+                () => this.Connection.SetStreamMetadata(stream, expectedMetastreamVersion, metadata, userCredentials));
         }
 
         public void SetStreamMetadata(string stream, int expectedMetastreamVersion, StreamMetadata metadata, UserCredentials userCredentials = null)
         {
-            this.Connection.SetStreamMetadata(stream, expectedMetastreamVersion, metadata, userCredentials);
+            this.ProfileActivity("SetStreamMetadata", 
+                () => this.Connection.SetStreamMetadata(stream, expectedMetastreamVersion, metadata, userCredentials));
         }
 
         public Task SetStreamMetadataAsync(string stream, int expectedMetastreamVersion, byte[] metadata, UserCredentials userCredentials = null)
@@ -181,7 +189,8 @@ namespace Glimpse.EventStore
 
         public void SetSystemSettings(SystemSettings settings, UserCredentials userCredentials = null)
         {
-            this.Connection.SetSystemSettings(settings, userCredentials);
+            this.ProfileActivity("SetSystemSettings", 
+                () => this.Connection.SetSystemSettings(settings, userCredentials));
         }
 
         public Task SetSystemSettingsAsync(SystemSettings settings, UserCredentials userCredentials = null)
@@ -191,7 +200,7 @@ namespace Glimpse.EventStore
 
         public EventStoreTransaction StartTransaction(string stream, int expectedVersion, UserCredentials userCredentials = null)
         {
-            return this.Connection.StartTransaction(stream, expectedVersion, userCredentials);
+            return this.ProfileActivity("StartTransaction", () => this.Connection.StartTransaction(stream, expectedVersion, userCredentials));
         }
 
         public Task<EventStoreTransaction> StartTransactionAsync(string stream, int expectedVersion, UserCredentials userCredentials = null)
@@ -201,7 +210,7 @@ namespace Glimpse.EventStore
 
         public EventStoreSubscription SubscribeToAll(bool resolveLinkTos, Action<EventStoreSubscription, ResolvedEvent> eventAppeared, Action<EventStoreSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null, UserCredentials userCredentials = null)
         {
-            return this.Connection.SubscribeToAll(resolveLinkTos, eventAppeared, subscriptionDropped, userCredentials);
+            return this.ProfileActivity("SubscribeToAll", () => this.Connection.SubscribeToAll(resolveLinkTos, eventAppeared, subscriptionDropped, userCredentials));
         }
 
         public Task<EventStoreSubscription> SubscribeToAllAsync(bool resolveLinkTos, Action<EventStoreSubscription, ResolvedEvent> eventAppeared, Action<EventStoreSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null, UserCredentials userCredentials = null)
@@ -211,12 +220,12 @@ namespace Glimpse.EventStore
 
         public EventStoreAllCatchUpSubscription SubscribeToAllFrom(Position? fromPositionExclusive, bool resolveLinkTos, Action<EventStoreCatchUpSubscription, ResolvedEvent> eventAppeared, Action<EventStoreCatchUpSubscription> liveProcessingStarted = null, Action<EventStoreCatchUpSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null, UserCredentials userCredentials = null)
         {
-            return this.Connection.SubscribeToAllFrom(fromPositionExclusive, resolveLinkTos, eventAppeared, liveProcessingStarted, subscriptionDropped, userCredentials);
+            return this.ProfileActivity("SubscribeToAllFrom", () => this.Connection.SubscribeToAllFrom(fromPositionExclusive, resolveLinkTos, eventAppeared, liveProcessingStarted, subscriptionDropped, userCredentials));
         }
 
         public EventStoreSubscription SubscribeToStream(string stream, bool resolveLinkTos, Action<EventStoreSubscription, ResolvedEvent> eventAppeared, Action<EventStoreSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null, UserCredentials userCredentials = null)
         {
-            return this.Connection.SubscribeToStream(stream, resolveLinkTos, eventAppeared, subscriptionDropped, userCredentials);
+            return this.ProfileActivity("SubscribeToStream", () => this.Connection.SubscribeToStream(stream, resolveLinkTos, eventAppeared, subscriptionDropped, userCredentials));
         }
 
         public Task<EventStoreSubscription> SubscribeToStreamAsync(string stream, bool resolveLinkTos, Action<EventStoreSubscription, ResolvedEvent> eventAppeared, Action<EventStoreSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null, UserCredentials userCredentials = null)
@@ -226,32 +235,42 @@ namespace Glimpse.EventStore
 
         public EventStoreStreamCatchUpSubscription SubscribeToStreamFrom(string stream, int? fromEventNumberExclusive, bool resolveLinkTos, Action<EventStoreCatchUpSubscription, ResolvedEvent> eventAppeared, Action<EventStoreCatchUpSubscription> liveProcessingStarted = null, Action<EventStoreCatchUpSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null, UserCredentials userCredentials = null)
         {
-            return this.Connection.SubscribeToStreamFrom(stream, fromEventNumberExclusive, resolveLinkTos, eventAppeared, liveProcessingStarted, subscriptionDropped, userCredentials);
+            return this.ProfileActivity("SubscribeToStreamFrom", 
+                () => this.Connection.SubscribeToStreamFrom(stream, fromEventNumberExclusive, resolveLinkTos, eventAppeared, liveProcessingStarted, subscriptionDropped, userCredentials));
         }
 
         public void Dispose()
         {
-            this.Connection.Dispose();
+            this.ProfileActivity("Dispose",
+                () => this.Connection.Dispose());
         }
 
-        public static bool ProfilingEnabled
+        private static bool ProfilingEnabled
         {
             get { return InspectorContext != null && InspectorContext.RuntimePolicyStrategy() != RuntimePolicy.Off; }
         }
 
-        private T ProfileActivity<T>(string activityName, Func<T> action)
+        private void ProfileActivity(string activityName, Action activity)
+        {
+            if (ProfilingEnabled)
+                this.ProfileActivity<object>(activityName, () => { activity(); return null; });
+            else
+                activity();
+        }
+
+        private T ProfileActivity<T>(string activityName, Func<T> activity)
         {
             if (!ProfilingEnabled)
-                return action();
+                return activity();
 
             var stopwatch = Stopwatch.StartNew();
-            var result = action();
+            var result = activity();
             stopwatch.Stop();
 
             var message = new Messages.ConnectionActivity 
             { 
                 ConnectionName = this.Connection.ConnectionName,
-                Name = "ReadStreamEventsForward", 
+                Name = activityName, 
                 Results = result, 
                 ElapsedMilliseconds = stopwatch.ElapsedMilliseconds 
             };

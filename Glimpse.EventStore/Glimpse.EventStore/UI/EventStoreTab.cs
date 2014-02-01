@@ -27,7 +27,7 @@ namespace Glimpse.EventStore.UI
         {
             var activity = context.GetMessages<Messages.ConnectionActivity>().ToList();
 
-            return activity;
+            return activity.Any() ? activity : null;
         }
 
         public override string Name
