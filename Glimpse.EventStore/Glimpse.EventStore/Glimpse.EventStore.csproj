@@ -52,6 +52,7 @@
     <Compile Include="UI\EventStoreTab.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Glimpse.EventStore.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
