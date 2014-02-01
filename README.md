@@ -13,15 +13,20 @@ Usage
 
 No other changes in the code are needed.
 
+You can hide user password provided in `UserCredentials` by adding an entry to `<appSettings>` in web.config file:
+
+    <add key="Glimpse.EventStore:HideUserCredentialsPassword" value="True" />
+
 Roadmap
 =======
 
 Features to implement:
 
-1. Optionaly hiding `UserCredentials.Password` field,
-2. Proper timings for async methods (currently timings show only the duration of returning a `Task` instance, not the actual execution of the `Task`),
-3. Deserialization of individual events' body and metadata,
-4. Improvements in the UI.
+1. ~~Optionaly hiding `UserCredentials.Password` field~~ (1.0.0-alpha4),
+2. Add support fo showing activities in Timeline,
+3. Proper timings for async methods (currently timings show only the duration of returning a `Task` instance, not the actual execution of the `Task`),
+4. ~~Deserialization of individual events' body and metadata~~ (1.0.0-alpha4),
+5. Improvements in the UI.
 
 Disclaimer
 ==========
