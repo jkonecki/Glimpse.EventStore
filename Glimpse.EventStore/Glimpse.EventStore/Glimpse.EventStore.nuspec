@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Glimpse.EventStore</id>
-    <version>1.0.0-alpha3</version>
+    <version>1.0.0-alpha4</version>
     <title>Glimpse EventStore</title>
     <authors>Jakub Konecki</authors>
     <owners>Jakub Konecki</owners>
