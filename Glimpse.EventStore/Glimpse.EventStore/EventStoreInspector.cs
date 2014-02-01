@@ -10,7 +10,7 @@ namespace Glimpse.EventStore
     {
         public void Setup(IInspectorContext context)
         {
-            ProfiledEventStoreConnection.InspectorContext = context;
+            EventStoreConnectionProfiler.InspectorContext = context;
         }
     }
 }

@@ -22,7 +22,7 @@
     <copyright>Copyright Jakub Konecki 2014</copyright>
     <dependencies>
         <group targetFramework="net40">
-          <dependency id="EventStore.Client" version="2.0.2" />
+          <dependency id="EventStore.Client" version="2.0.0" />
           <dependency id="Glimpse" version="1.8.1" />
         </group>
     </dependencies>

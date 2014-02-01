@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
+using Glimpse.Core.Extensibility;
 
 namespace Glimpse.EventStore
 {
     class EventStoreConnectionProfiler : IEventStoreConnection
     {
+        internal static IInspectorContext InspectorContext;
+
         private readonly IEventStoreConnection Connection;
 
         public EventStoreConnectionProfiler(IEventStoreConnection connection)
@@ -147,7 +151,7 @@ namespace Glimpse.EventStore
 
         public StreamEventsSlice ReadStreamEventsForward(string stream, int start, int count, bool resolveLinkTos, UserCredentials userCredentials = null)
         {
-            return this.Connection.ReadStreamEventsForward(stream, start, count, resolveLinkTos, userCredentials);
+            return ProfileActivity("ReadStreamEventsForward", () => this.Connection.ReadStreamEventsForward(stream, start, count, resolveLinkTos, userCredentials));
         }
 
         public Task<StreamEventsSlice> ReadStreamEventsForwardAsync(string stream, int start, int count, bool resolveLinkTos, UserCredentials userCredentials = null)
@@ -228,6 +232,33 @@ namespace Glimpse.EventStore
         public void Dispose()
         {
             this.Connection.Dispose();
+        }
+
+        public static bool ProfilingEnabled
+        {
+            get { return InspectorContext != null && InspectorContext.RuntimePolicyStrategy() != RuntimePolicy.Off; }
+        }
+
+        private T ProfileActivity<T>(string activityName, Func<T> action)
+        {
+            if (!ProfilingEnabled)
+                return action();
+
+            var stopwatch = Stopwatch.StartNew();
+            var result = action();
+            stopwatch.Stop();
+
+            var message = new Messages.ConnectionActivity 
+            { 
+                ConnectionName = this.Connection.ConnectionName,
+                Name = "ReadStreamEventsForward", 
+                Results = result, 
+                ElapsedMilliseconds = stopwatch.ElapsedMilliseconds 
+            };
+
+            InspectorContext.MessageBroker.Publish(message);
+
+            return result;
         }
     }
 }

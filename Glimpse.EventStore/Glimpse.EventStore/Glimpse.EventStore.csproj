@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="EventStoreConnectionProfiler.cs" />
     <Compile Include="EventStoreInspector.cs" />
+    <Compile Include="Messages\ConnectionActivity.cs" />
     <Compile Include="ProfiledEventStoreConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\EventStoreTab.cs" />
