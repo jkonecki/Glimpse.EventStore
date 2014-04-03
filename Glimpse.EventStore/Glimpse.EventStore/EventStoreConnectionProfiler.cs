@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using EventStore.ClientAPI.SystemData;
 using Glimpse.Core.Extensibility;
+using Glimpse.Core.Message;
 
 namespace Glimpse.EventStore
 {
@@ -414,6 +415,7 @@ namespace Glimpse.EventStore
             if (!ProfilingEnabled)
                 return activity();
 
+            var startTime = DateTime.UtcNow;
             var stopwatch = Stopwatch.StartNew();
             var result = activity();
             stopwatch.Stop();
@@ -429,7 +431,25 @@ namespace Glimpse.EventStore
 
             InspectorContext.MessageBroker.Publish(message);
 
+            Timeline(activityName, new TimerResult
+            {
+                StartTime = startTime,
+                Offset = startTime.Subtract(InspectorContext.TimerStrategy().RequestStart.ToUniversalTime()),
+                Duration = stopwatch.Elapsed
+            });
+
             return result;
+        }
+
+        private static void Timeline(string message, TimerResult timer)
+        {
+            if (!ProfilingEnabled) 
+                return;
+
+            InspectorContext.MessageBroker.Publish(
+                new Messages.ConnectionActivityTimeline()
+                    .AsTimelineMessage(message, Messages.ConnectionActivityTimeline.TimelineCategory)
+                    .AsTimedMessage(timer));
         }
 
         #endregion
