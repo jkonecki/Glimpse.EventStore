@@ -18,7 +18,7 @@ namespace Glimpse.EventStore.UI
 
             return new 
             {
-                obj.Login, 
+                obj.Username, 
                 Password = hidePassword ? "****" : obj.Password
             };
         }

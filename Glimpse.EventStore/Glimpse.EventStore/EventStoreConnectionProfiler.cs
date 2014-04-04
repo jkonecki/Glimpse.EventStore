@@ -25,34 +25,34 @@ namespace Glimpse.EventStore
             this.Connection = connection;
         }
 
-        public void AppendToStream(string stream, int expectedVersion, IEnumerable<EventData> events, UserCredentials userCredentials = null)
+        public WriteResult AppendToStream(string stream, int expectedVersion, IEnumerable<EventData> events, UserCredentials userCredentials = null)
         {
-            this.ProfileActivity(
+            return this.ProfileActivity(
                 "AppendToStream",
                 () => this.Connection.AppendToStream(stream, expectedVersion, events, userCredentials),
                 new { stream, expectedVersion, events, userCredentials }
             );
         }
 
-        public void AppendToStream(string stream, int expectedVersion, UserCredentials userCredentials, params EventData[] events)
+        public WriteResult AppendToStream(string stream, int expectedVersion, UserCredentials userCredentials, params EventData[] events)
         {
-            this.ProfileActivity(
+            return this.ProfileActivity(
                 "AppendToStream",
                 () => this.Connection.AppendToStream(stream, expectedVersion, userCredentials, events),
                 new { stream, expectedVersion, userCredentials, events }
             );
         }
         
-        public void AppendToStream(string stream, int expectedVersion, params EventData[] events)
+        public WriteResult AppendToStream(string stream, int expectedVersion, params EventData[] events)
         {
-            this.ProfileActivity(
+            return this.ProfileActivity(
                 "AppendToStream",
                 () => this.Connection.AppendToStream(stream, expectedVersion, events),
                 new { stream, expectedVersion, events }
             );
         }
 
-        public Task AppendToStreamAsync(string stream, int expectedVersion, IEnumerable<EventData> events, UserCredentials userCredentials = null)
+        public Task<WriteResult> AppendToStreamAsync(string stream, int expectedVersion, IEnumerable<EventData> events, UserCredentials userCredentials = null)
         {
             return this.ProfileActivity(
                 "AppendToStreamAsync",
@@ -61,7 +61,7 @@ namespace Glimpse.EventStore
             );
         }
 
-        public Task AppendToStreamAsync(string stream, int expectedVersion, UserCredentials userCredentials, params EventData[] events)
+        public Task<WriteResult> AppendToStreamAsync(string stream, int expectedVersion, UserCredentials userCredentials, params EventData[] events)
         {
             return this.ProfileActivity(
                 "AppendToStreamAsync",
@@ -70,7 +70,7 @@ namespace Glimpse.EventStore
             );
         }
 
-        public Task AppendToStreamAsync(string stream, int expectedVersion, params EventData[] events)
+        public Task<WriteResult> AppendToStreamAsync(string stream, int expectedVersion, params EventData[] events)
         {
             return this.ProfileActivity(
                 "AppendToStreamAsync",
@@ -126,12 +126,30 @@ namespace Glimpse.EventStore
             );
         }
 
+        public void DeleteStream(string stream, int expectedVersion, bool hardDelete, UserCredentials userCredentials = null)
+        {
+            this.ProfileActivity(
+                "DeleteStream",
+                () => this.Connection.DeleteStream(stream, expectedVersion, hardDelete, userCredentials),
+                new { stream, expectedVersion, hardDelete, userCredentials }
+            );
+        }
+
         public Task DeleteStreamAsync(string stream, int expectedVersion, UserCredentials userCredentials = null)
         {
             return this.ProfileActivity(
                 "DeleteStreamAsync",
                 () => this.Connection.DeleteStreamAsync(stream, expectedVersion, userCredentials),
                 new { stream, expectedVersion, userCredentials }
+            );
+        }
+
+        public Task DeleteStreamAsync(string stream, int expectedVersion, bool hardDelete, UserCredentials userCredentials = null)
+        {
+            return this.ProfileActivity(
+                "DeleteStreamAsync",
+                () => this.Connection.DeleteStreamAsync(stream, expectedVersion, hardDelete, userCredentials),
+                new { stream, expectedVersion, hardDelete, userCredentials }
             );
         }
 
@@ -261,25 +279,25 @@ namespace Glimpse.EventStore
             );
         }
 
-        public void SetStreamMetadata(string stream, int expectedMetastreamVersion, byte[] metadata, UserCredentials userCredentials = null)
+        public WriteResult SetStreamMetadata(string stream, int expectedMetastreamVersion, byte[] metadata, UserCredentials userCredentials = null)
         {
-            this.ProfileActivity(
+            return this.ProfileActivity(
                 "SetStreamMetadata",
                 () => this.Connection.SetStreamMetadata(stream, expectedMetastreamVersion, metadata, userCredentials),
                 new { stream, expectedMetastreamVersion, metadata, userCredentials }
             );
         }
 
-        public void SetStreamMetadata(string stream, int expectedMetastreamVersion, StreamMetadata metadata, UserCredentials userCredentials = null)
+        public WriteResult SetStreamMetadata(string stream, int expectedMetastreamVersion, StreamMetadata metadata, UserCredentials userCredentials = null)
         {
-            this.ProfileActivity(
+            return this.ProfileActivity(
                 "SetStreamMetadata",
                 () => this.Connection.SetStreamMetadata(stream, expectedMetastreamVersion, metadata, userCredentials),
                 new { stream, expectedMetastreamVersion, metadata, userCredentials }
             );
         }
 
-        public Task SetStreamMetadataAsync(string stream, int expectedMetastreamVersion, byte[] metadata, UserCredentials userCredentials = null)
+        public Task<WriteResult> SetStreamMetadataAsync(string stream, int expectedMetastreamVersion, byte[] metadata, UserCredentials userCredentials = null)
         {
             return this.ProfileActivity(
                 "SetStreamMetadataAsync",
@@ -288,7 +306,7 @@ namespace Glimpse.EventStore
             );
         }
 
-        public Task SetStreamMetadataAsync(string stream, int expectedMetastreamVersion, StreamMetadata metadata, UserCredentials userCredentials = null)
+        public Task<WriteResult> SetStreamMetadataAsync(string stream, int expectedMetastreamVersion, StreamMetadata metadata, UserCredentials userCredentials = null)
         {
             return this.ProfileActivity(
                 "SetStreamMetadataAsync",
@@ -351,12 +369,12 @@ namespace Glimpse.EventStore
             );
         }
 
-        public EventStoreAllCatchUpSubscription SubscribeToAllFrom(Position? fromPositionExclusive, bool resolveLinkTos, Action<EventStoreCatchUpSubscription, ResolvedEvent> eventAppeared, Action<EventStoreCatchUpSubscription> liveProcessingStarted = null, Action<EventStoreCatchUpSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null, UserCredentials userCredentials = null)
+        public EventStoreAllCatchUpSubscription SubscribeToAllFrom(Position? lastCheckpoint, bool resolveLinkTos, Action<EventStoreCatchUpSubscription, ResolvedEvent> eventAppeared, Action<EventStoreCatchUpSubscription> liveProcessingStarted = null, Action<EventStoreCatchUpSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null, UserCredentials userCredentials = null, int readBatchSize = 500)
         {
             return this.ProfileActivity(
                 "SubscribeToAllFrom",
-                () => this.Connection.SubscribeToAllFrom(fromPositionExclusive, resolveLinkTos, eventAppeared, liveProcessingStarted, subscriptionDropped, userCredentials),
-                new { fromPositionExclusive, resolveLinkTos, eventAppeared, liveProcessingStarted, subscriptionDropped, userCredentials }
+                () => this.Connection.SubscribeToAllFrom(lastCheckpoint, resolveLinkTos, eventAppeared, liveProcessingStarted, subscriptionDropped, userCredentials, readBatchSize),
+                new { lastCheckpoint, resolveLinkTos, eventAppeared, liveProcessingStarted, subscriptionDropped, userCredentials, readBatchSize }
             );
         }
 
@@ -378,14 +396,26 @@ namespace Glimpse.EventStore
             );
         }
 
-        public EventStoreStreamCatchUpSubscription SubscribeToStreamFrom(string stream, int? fromEventNumberExclusive, bool resolveLinkTos, Action<EventStoreCatchUpSubscription, ResolvedEvent> eventAppeared, Action<EventStoreCatchUpSubscription> liveProcessingStarted = null, Action<EventStoreCatchUpSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null, UserCredentials userCredentials = null)
+        public EventStoreStreamCatchUpSubscription SubscribeToStreamFrom(string stream, int? lastCheckpoint, bool resolveLinkTos, Action<EventStoreCatchUpSubscription, ResolvedEvent> eventAppeared, Action<EventStoreCatchUpSubscription> liveProcessingStarted = null, Action<EventStoreCatchUpSubscription, SubscriptionDropReason, Exception> subscriptionDropped = null, UserCredentials userCredentials = null, int readBatchSize = 500)
         {
             return this.ProfileActivity(
                 "SubscribeToStreamFrom",
-                () => this.Connection.SubscribeToStreamFrom(stream, fromEventNumberExclusive, resolveLinkTos, eventAppeared, liveProcessingStarted, subscriptionDropped, userCredentials),
-                new { stream, fromEventNumberExclusive, resolveLinkTos, eventAppeared, liveProcessingStarted, subscriptionDropped, userCredentials }
+                () => this.Connection.SubscribeToStreamFrom(stream, lastCheckpoint, resolveLinkTos, eventAppeared, liveProcessingStarted, subscriptionDropped, userCredentials, readBatchSize),
+                new { stream, lastCheckpoint, resolveLinkTos, eventAppeared, liveProcessingStarted, subscriptionDropped, userCredentials, readBatchSize }
             );
         }
+
+        public event EventHandler<ClientAuthenticationFailedEventArgs> AuthenticationFailed;
+
+        public event EventHandler<ClientClosedEventArgs> Closed;
+
+        public event EventHandler<ClientConnectionEventArgs> Connected;
+
+        public event EventHandler<ClientConnectionEventArgs> Disconnected;
+
+        public event EventHandler<ClientErrorEventArgs> ErrorOccurred;
+
+        public event EventHandler<ClientReconnectingEventArgs> Reconnecting;
 
         public void Dispose()
         {
