@@ -405,17 +405,41 @@ namespace Glimpse.EventStore
             );
         }
 
-        public event EventHandler<ClientAuthenticationFailedEventArgs> AuthenticationFailed;
+        public event EventHandler<ClientAuthenticationFailedEventArgs> AuthenticationFailed
+        {
+            add { this.Connection.AuthenticationFailed += value; }
+            remove { this.Connection.AuthenticationFailed -= value; }
+        }
 
-        public event EventHandler<ClientClosedEventArgs> Closed;
+        public event EventHandler<ClientClosedEventArgs> Closed
+        {
+            add { this.Connection.Closed += value; }
+            remove { this.Connection.Closed -= value; }
+        }
 
-        public event EventHandler<ClientConnectionEventArgs> Connected;
+        public event EventHandler<ClientConnectionEventArgs> Connected
+        {
+            add { this.Connection.Connected += value; }
+            remove { this.Connection.Connected -= value; }
+        }
 
-        public event EventHandler<ClientConnectionEventArgs> Disconnected;
+        public event EventHandler<ClientConnectionEventArgs> Disconnected
+        {
+            add { this.Connection.Disconnected += value; }
+            remove { this.Connection.Disconnected -= value; }
+        }
 
-        public event EventHandler<ClientErrorEventArgs> ErrorOccurred;
+        public event EventHandler<ClientErrorEventArgs> ErrorOccurred
+        {
+            add { this.Connection.ErrorOccurred += value; }
+            remove { this.Connection.ErrorOccurred -= value; }
+        }
 
-        public event EventHandler<ClientReconnectingEventArgs> Reconnecting;
+        public event EventHandler<ClientReconnectingEventArgs> Reconnecting
+        {
+            add { this.Connection.Reconnecting += value; }
+            remove { this.Connection.Reconnecting -= value; }
+        }
 
         public void Dispose()
         {
@@ -469,6 +493,33 @@ namespace Glimpse.EventStore
             });
 
             return result;
+        }
+
+        private void ProfileEvent<E>(string eventName, object sender, E args)
+            where E : EventArgs
+        {
+            if (!ProfilingEnabled)
+                return;
+
+            var message = new Messages.ConnectionActivity
+            {
+                ConnectionName = this.Connection.ConnectionName,
+                Name = eventName,
+                ElapsedMilliseconds = 1,
+                Arguments = args
+            };
+
+            InspectorContext.MessageBroker.Publish(message);
+
+            var startTime = DateTime.UtcNow;
+
+            Timeline(eventName, new TimerResult
+            {
+                StartTime = startTime,
+                Offset = startTime.Subtract(InspectorContext.TimerStrategy().RequestStart.ToUniversalTime()),
+                Duration = TimeSpan.FromMilliseconds(1)
+            });
+
         }
 
         private static void Timeline(string message, TimerResult timer)
