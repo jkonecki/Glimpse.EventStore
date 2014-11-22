@@ -25,6 +25,21 @@ namespace Glimpse.EventStore
             this.Connection = connection;
         }
 
+        public string ConnectionName
+        {
+            get { return this.Connection.ConnectionName; }
+        }
+
+        public ClusterSettings ClusterSettings
+        {
+            get { return this.Connection.ClusterSettings; }
+        }
+
+        public ConnectionSettings Settings
+        {
+            get { return this.Connection.Settings; }
+        }
+
         public Task<WriteResult> AppendToStreamAsync(string stream, int expectedVersion, IEnumerable<EventData> events, UserCredentials userCredentials = null)
         {
             return this.ProfileActivity(
@@ -66,11 +81,6 @@ namespace Glimpse.EventStore
                 "Connect",
                 () => this.Connection.ConnectAsync())
             ;
-        }
-
-        public string ConnectionName
-        {
-            get { return this.Connection.ConnectionName; }
         }
 
         public EventStoreTransaction ContinueTransaction(long transactionId, UserCredentials userCredentials = null)
@@ -347,7 +357,7 @@ namespace Glimpse.EventStore
                 {
                     ConnectionName = this.Connection.ConnectionName,
                     Name = activityName,
-                    ElapsedMilliseconds = stopwatch.ElapsedMilliseconds,
+                    ElapsedMilliseconds = stopwatch.ElapsedTicks / (Stopwatch.Frequency / (1000L * 1000L * 1000L)),
                     Arguments = arguments,
                     //Results = task.Result
                 };

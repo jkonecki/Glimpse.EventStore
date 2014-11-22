@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Glimpse.EventStore</id>
-    <version>2.0.1</version>
+    <version>2.1.0</version>
     <title>Glimpse EventStore</title>
     <authors>Jakub Konecki</authors>
     <owners>Jakub Konecki</owners>
@@ -22,7 +22,7 @@
     <copyright>Copyright Jakub Konecki 2014</copyright>
     <dependencies>
         <group targetFramework="net40">
-          <dependency id="EventStore.Client" version="[3.0.0,4.0.0)" />
+          <dependency id="EventStore.Client" version="[3.0.1,4.0.0)" />
           <dependency id="Glimpse" version="1.8.1" />
         </group>
     </dependencies>
